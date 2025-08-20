@@ -1,0 +1,18 @@
+name: Build Marp Deck
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+      - run: npm i -g @marp-team/marp-cli
+      - run: mkdir -p dist
+      - run: marp slides.md --html --allow-local-files -o dist/slides.html
+      - run: marp slides.md --pdf  --allow-local-files -o dist/slides.pdf
+      - run: marp slides.md --pptx --allow-local-files -o dist/slides.pptx
+      - uses: actions/upload-artifact@v4
+        with:
+          name: deck
+          path: dist/
